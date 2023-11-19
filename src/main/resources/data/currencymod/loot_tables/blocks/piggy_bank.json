@@ -1,15 +1,15 @@
 {
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "rolls": 1,
-      "entries": [
+    "type": "minecraft:block",
+    "pools": [
         {
-          "type": "minecraft:item",
-          "name": "currencymod:piggy_bank"
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "currencymod:piggy_bank"
+                }
+            ],
+            "conditions": []
         }
-      ],
-      "conditions": []
-    }
-  ]
+    ]
 }

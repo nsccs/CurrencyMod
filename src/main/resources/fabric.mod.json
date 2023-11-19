@@ -1,38 +1,38 @@
 {
-	"schemaVersion": 1,
-	"id": "currencymod",
-	"version": "${version}",
-	"name": "Currency Mod",
-	"description": "A mod that adds currency to the game.",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/currencymod/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"org.northcs.CurrencyMod"
-		],
-		"client": [
-			"org.northcs.CurrencyModClient"
-		]
-	},
-	"mixins": [
-		"currencymod.mixins.json",
-		{
-			"config": "currencymod.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.14.24",
-		"minecraft": "~1.20.1",
-		"java": ">=17",
-		"fabric-api": "*"
-	}
+    "schemaVersion": 1,
+    "id": "currencymod",
+    "version": "${version}",
+    "name": "Currency Mod",
+    "description": "A mod that adds currency to the game.",
+    "authors": [
+        "Me!"
+    ],
+    "contact": {
+        "homepage": "https://fabricmc.net/",
+        "sources": "https://github.com/FabricMC/fabric-example-mod"
+    },
+    "license": "CC0-1.0",
+    "icon": "assets/currencymod/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "org.northcs.CurrencyMod"
+        ],
+        "client": [
+            "org.northcs.CurrencyModClient"
+        ]
+    },
+    "mixins": [
+        "currencymod.mixins.json",
+        {
+            "config": "currencymod.client.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.14.24",
+        "minecraft": "~1.20.1",
+        "java": ">=17",
+        "fabric-api": "*"
+    }
 }

@@ -6,7 +6,6 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -42,7 +41,7 @@ public class PiggyBank extends HorizontalFacingBlock implements Waterloggable {
         if (world.isClient) return ActionResult.SUCCESS;
 
         UUID uuid = player.getUuid();
-        if(!PiggyBanks.piggyBanks.containsKey(uuid)) {
+        if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
             PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
         }
 
@@ -67,7 +66,7 @@ public class PiggyBank extends HorizontalFacingBlock implements Waterloggable {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext ctx) {
         Direction dir = state.get(FACING);
-        switch(dir) {
+        switch (dir) {
             case NORTH:
             case SOUTH:
                 return VoxelShapes.cuboid(0.0f, 0.0f, 0.125f, 1.0f, 0.9375f, 0.875f);

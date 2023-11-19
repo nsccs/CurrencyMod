@@ -3,9 +3,7 @@ package org.northcs.piggyBank;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -35,19 +33,19 @@ public class PiggyBankGUI extends ScreenHandler {
 
         int j;
         int k;
-        for(j = 0; j < this.rows; ++j) {
-            for(k = 0; k < 9; ++k) {
+        for (j = 0; j < this.rows; ++j) {
+            for (k = 0; k < 9; ++k) {
                 this.addSlot(new PiggyBankSlot(inventory, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
         }
 
-        for(j = 0; j < 3; ++j) {
-            for(k = 0; k < 9; ++k) {
+        for (j = 0; j < 3; ++j) {
+            for (k = 0; k < 9; ++k) {
                 this.addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
             }
         }
 
-        for(j = 0; j < 9; ++j) {
+        for (j = 0; j < 9; ++j) {
             this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 161 + i));
         }
 
@@ -95,7 +93,7 @@ public class PiggyBankGUI extends ScreenHandler {
     }
 
     public static class PiggyBankSlot extends Slot {
-        public Class[] allowedItems = new Class[] { GoldCoin.class, IronCoin.class, CopperCoin.class };
+        public Class[] allowedItems = new Class[]{GoldCoin.class, IronCoin.class, CopperCoin.class};
 
         public PiggyBankSlot(Inventory inventory, int index, int x, int y) {
             super(inventory, index, x, y);

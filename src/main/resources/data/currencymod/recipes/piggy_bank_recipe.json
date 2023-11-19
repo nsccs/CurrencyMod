@@ -1,19 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "T T",
-    "TCT",
-    "TTT"
-  ],
-  "key": {
-    "T": {
-      "item": "minecraft:pink_glazed_terracotta"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "T T",
+        "TCT",
+        "TTT"
+    ],
+    "key": {
+        "T": {
+            "item": "minecraft:pink_glazed_terracotta"
+        },
+        "C": {
+            "item": "currencymod:copper_coin"
+        }
     },
-    "C": {
-      "item": "currencymod:copper_coin"
+    "result": {
+        "item": "currencymod:piggy_bank"
     }
-  },
-  "result": {
-    "item": "currencymod:piggy_bank"
-  }
 }

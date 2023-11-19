@@ -22,46 +22,48 @@ import java.util.UUID;
 
 @Mixin(PlayerEntity.class)
 public abstract class PiggyBankMixin extends Entity {
-	@Shadow @Final private static Logger LOGGER;
+    @Shadow
+    @Final
+    private static Logger LOGGER;
 
-	public PiggyBankMixin(EntityType<?> type, World world) {
-		super(type, world);
-	}
+    public PiggyBankMixin(EntityType<?> type, World world) {
+        super(type, world);
+    }
 
-	@Inject(at = @At("TAIL"), method = "readCustomDataFromNbt", locals = LocalCapture.CAPTURE_FAILHARD)
-	private void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-		UUID uuid = this.getUuid();
+    @Inject(at = @At("TAIL"), method = "readCustomDataFromNbt", locals = LocalCapture.CAPTURE_FAILHARD)
+    private void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+        UUID uuid = this.getUuid();
 
-		if (nbt.contains("PiggyItems", 9)) {
-			if(!PiggyBanks.piggyBanks.containsKey(uuid)) {
-				// The player doesn't have a piggy bank, so give them a starting balance.
-				PiggyBankInventory piggyBankInventory = new PiggyBankInventory();
-				piggyBankInventory.addStack(new ItemStack(CurrencyMod.GOLD_COIN, 5));
-				piggyBankInventory.addStack(new ItemStack(CurrencyMod.IRON_COIN, 5));
-				piggyBankInventory.addStack(new ItemStack(CurrencyMod.COPPER_COIN, 25));
+        if (nbt.contains("PiggyItems", 9)) {
+            if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
+                // The player doesn't have a piggy bank, so give them a starting balance.
+                PiggyBankInventory piggyBankInventory = new PiggyBankInventory();
+                piggyBankInventory.addStack(new ItemStack(CurrencyMod.GOLD_COIN, 5));
+                piggyBankInventory.addStack(new ItemStack(CurrencyMod.IRON_COIN, 5));
+                piggyBankInventory.addStack(new ItemStack(CurrencyMod.COPPER_COIN, 25));
 
-				PiggyBanks.piggyBanks.put(uuid, piggyBankInventory);
-			}
+                PiggyBanks.piggyBanks.put(uuid, piggyBankInventory);
+            }
 
-			PiggyBanks.piggyBanks.get(uuid).readNbtList(nbt.getList("PiggyItems", 10));
-		}
-	}
+            PiggyBanks.piggyBanks.get(uuid).readNbtList(nbt.getList("PiggyItems", 10));
+        }
+    }
 
-	@Inject(at = @At("TAIL"), method = "writeCustomDataToNbt", locals = LocalCapture.CAPTURE_FAILHARD)
-	private void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-		UUID uuid = this.getUuid();
+    @Inject(at = @At("TAIL"), method = "writeCustomDataToNbt", locals = LocalCapture.CAPTURE_FAILHARD)
+    private void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
+        UUID uuid = this.getUuid();
 
-		if(!PiggyBanks.piggyBanks.containsKey(uuid)) {
-			PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
-		}
+        if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
+            PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
+        }
 
-		PiggyBankInventory piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);
+        PiggyBankInventory piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);
 
-		nbt.put("PiggyItems", piggyBankInventory.toNbtList());
+        nbt.put("PiggyItems", piggyBankInventory.toNbtList());
 
-		// If this is writing because the player left, clear the inventory entry.
-		if(piggyBankInventory.playerLeft) {
-			PiggyBanks.piggyBanks.remove(uuid);
-		}
-	}
+        // If this is writing because the player left, clear the inventory entry.
+        if (piggyBankInventory.playerLeft) {
+            PiggyBanks.piggyBanks.remove(uuid);
+        }
+    }
 }

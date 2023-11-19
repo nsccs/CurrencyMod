@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "currencymod:item/gold_coin"
-  }
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "currencymod:item/gold_coin"
+    }
 }

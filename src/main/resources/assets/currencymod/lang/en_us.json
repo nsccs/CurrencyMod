@@ -1,8 +1,8 @@
 {
-  "item.currencymod.copper_coin": "Copper Coin",
-  "item.currencymod.gold_coin": "Gold Coin",
-  "item.currencymod.iron_coin": "Iron Coin",
-  "item.currencymod.piggy_bank": "Piggy Bank",
-  "block.currencymod.piggy_bank": "Piggy Bank",
-  "currencymod.piggy_bank.name": "Piggy Bank"
+    "item.currencymod.copper_coin": "Copper Coin",
+    "item.currencymod.gold_coin": "Gold Coin",
+    "item.currencymod.iron_coin": "Iron Coin",
+    "item.currencymod.piggy_bank": "Piggy Bank",
+    "block.currencymod.piggy_bank": "Piggy Bank",
+    "currencymod.piggy_bank.name": "Piggy Bank"
 }

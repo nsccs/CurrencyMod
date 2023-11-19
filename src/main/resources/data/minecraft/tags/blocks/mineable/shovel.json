@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "currencymod:piggy_bank"
-  ]
+    "replace": false,
+    "values": [
+        "currencymod:piggy_bank"
+    ]
 }

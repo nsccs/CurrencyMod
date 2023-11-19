@@ -1,8 +1,19 @@
 {
-  "variants": {
-    "facing=north": { "model": "currencymod:block/piggy_bank" },
-    "facing=east":  { "model": "currencymod:block/piggy_bank", "y":  90 },
-    "facing=south": { "model": "currencymod:block/piggy_bank", "y": 180 },
-    "facing=west":  { "model": "currencymod:block/piggy_bank", "y": 270 }
-  }
+    "variants": {
+        "facing=north": {
+            "model": "currencymod:block/piggy_bank"
+        },
+        "facing=east": {
+            "model": "currencymod:block/piggy_bank",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "currencymod:block/piggy_bank",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "currencymod:block/piggy_bank",
+            "y": 270
+        }
+    }
 }
