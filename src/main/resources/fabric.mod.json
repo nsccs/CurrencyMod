@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "currencymod",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Currency Mod",
+	"description": "A mod that adds currency to the game.",
 	"authors": [
 		"Me!"
 	],
@@ -30,12 +30,9 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.14.22",
-		"minecraft": "~1.20.2",
+		"fabricloader": ">=0.14.24",
+		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
