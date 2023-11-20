@@ -17,6 +17,8 @@ import org.northcs.items.CopperCoin;
 import org.northcs.items.GoldCoin;
 import org.northcs.items.IronCoin;
 import org.northcs.piggyBank.PiggyBankEvents;
+import org.northcs.selling.ReceiverQueue;
+import org.northcs.selling.SellingEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +47,9 @@ public class CurrencyMod implements ModInitializer {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> content.addAfter(IRON_COIN, COPPER_COIN));
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(content -> content.addAfter(Items.ENDER_CHEST, PIGGY_BANK));
 
+        ReceiverQueue.init();
+
         ServerPlayConnectionEvents.DISCONNECT.register(new PiggyBankEvents());
+        ServerPlayConnectionEvents.JOIN.register(new SellingEvents());
     }
 }

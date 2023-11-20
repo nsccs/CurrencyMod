@@ -3,10 +3,8 @@ package org.northcs.mixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import org.northcs.CurrencyMod;
 import org.northcs.piggyBank.PiggyBankInventory;
 import org.northcs.piggyBank.PiggyBanks;
 import org.slf4j.Logger;
@@ -38,9 +36,7 @@ public abstract class PiggyBankMixin extends Entity {
             if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
                 // The player doesn't have a piggy bank, so give them a starting balance.
                 PiggyBankInventory piggyBankInventory = new PiggyBankInventory();
-                piggyBankInventory.addStack(new ItemStack(CurrencyMod.GOLD_COIN, 5));
-                piggyBankInventory.addStack(new ItemStack(CurrencyMod.IRON_COIN, 5));
-                piggyBankInventory.addStack(new ItemStack(CurrencyMod.COPPER_COIN, 25));
+                piggyBankInventory.addDefaultItems();
 
                 PiggyBanks.piggyBanks.put(uuid, piggyBankInventory);
             }

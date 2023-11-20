@@ -4,7 +4,6 @@ import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
@@ -26,8 +25,6 @@ import org.northcs.piggyBank.PiggyBankGUI;
 import org.northcs.piggyBank.PiggyBankInventory;
 import org.northcs.piggyBank.PiggyBanks;
 
-import java.util.UUID;
-
 public class PiggyBank extends HorizontalFacingBlock implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
@@ -40,12 +37,12 @@ public class PiggyBank extends HorizontalFacingBlock implements Waterloggable {
     public ActionResult onUse(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
         if (world.isClient) return ActionResult.SUCCESS;
 
-        UUID uuid = player.getUuid();
+        var uuid = player.getUuid();
         if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
             PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
         }
 
-        Inventory piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);
+        var piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);
 
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
                 (syncId, inventory, playerEntity) -> new PiggyBankGUI(
@@ -65,7 +62,7 @@ public class PiggyBank extends HorizontalFacingBlock implements Waterloggable {
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext ctx) {
-        Direction dir = state.get(FACING);
+        var dir = state.get(FACING);
         switch (dir) {
             case NORTH:
             case SOUTH:
