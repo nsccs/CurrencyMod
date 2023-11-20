@@ -1,6 +1,7 @@
 package org.northcs;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -13,11 +14,13 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.northcs.blocks.PiggyBank;
+import org.northcs.items.CoinBase;
 import org.northcs.items.CopperCoin;
 import org.northcs.items.GoldCoin;
 import org.northcs.items.IronCoin;
 import org.northcs.piggyBank.PiggyBankEvents;
 import org.northcs.selling.ReceiverQueue;
+import org.northcs.selling.SellCommand;
 import org.northcs.selling.SellingEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,11 @@ public class CurrencyMod implements ModInitializer {
     public static final CopperCoin COPPER_COIN = new CopperCoin(new FabricItemSettings());
 
     public static final Block PIGGY_BANK = new PiggyBank(FabricBlockSettings.create().strength(3.0f).nonOpaque().requiresTool());
+
+    /**
+     * A list of all coin denominations, sorted from greatest to lowest value.
+     */
+    public static final CoinBase[] COINS = new CoinBase[]{GOLD_COIN, IRON_COIN, COPPER_COIN};
 
     @Override
     public void onInitialize() {
@@ -49,7 +57,13 @@ public class CurrencyMod implements ModInitializer {
 
         ReceiverQueue.init();
 
-        ServerPlayConnectionEvents.DISCONNECT.register(new PiggyBankEvents());
-        ServerPlayConnectionEvents.JOIN.register(new SellingEvents());
+        var piggyBankEvents = new PiggyBankEvents();
+        var sellingEvents = new SellingEvents();
+
+        ServerPlayConnectionEvents.DISCONNECT.register(piggyBankEvents);
+        ServerPlayConnectionEvents.DISCONNECT.register(sellingEvents);
+        ServerPlayConnectionEvents.JOIN.register(sellingEvents);
+
+        CommandRegistrationCallback.EVENT.register(new SellCommand());
     }
 }

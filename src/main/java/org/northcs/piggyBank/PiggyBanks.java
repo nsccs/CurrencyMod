@@ -99,4 +99,37 @@ public class PiggyBanks {
 
         return piggyBankInventory.addStack(stack);
     }
+
+    /**
+     * Puts the specified amount of money in a player's piggy bank.
+     * If it doesn't fit, it will be dropped on the ground.
+     *
+     * @param player the player to give the money to.
+     * @param amount the amount of money to give.
+     */
+    public static void giveMoney(PlayerEntity player, int amount) {
+        // First, split the denominations.
+        int curAmount = amount;
+
+        ItemStack[] coins = new ItemStack[CurrencyMod.COINS.length];
+        // This list is sorted by highest to lowest value.
+        for (var i = 0; i < CurrencyMod.COINS.length; i++) {
+            var denomination = CurrencyMod.COINS[i];
+
+            var numberOfCoins = curAmount / denomination.amount();
+            curAmount %= denomination.amount();
+
+            coins[i] = new ItemStack(denomination, numberOfCoins);
+        }
+
+        // Try adding the coins to the player's piggy bank.
+        for (var i = 0; i < coins.length; i++) {
+            if (!coins[i].isEmpty()) coins[i] = addToOnlinePlayer(player, coins[i]);
+        }
+
+        // And if that doesn't work, stick them on the ground.
+        for (ItemStack coin : coins) {
+            if (!coin.isEmpty()) player.dropStack(coin);
+        }
+    }
 }

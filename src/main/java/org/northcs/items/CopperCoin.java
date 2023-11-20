@@ -1,9 +1,12 @@
 package org.northcs.items;
 
-import net.minecraft.item.Item;
-
-public class CopperCoin extends Item {
+public class CopperCoin extends CoinBase {
     public CopperCoin(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public int amount() {
+        return 1;
     }
 }

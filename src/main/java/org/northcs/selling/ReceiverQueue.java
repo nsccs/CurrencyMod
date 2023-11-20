@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 public class ReceiverQueue {
@@ -92,5 +93,13 @@ public class ReceiverQueue {
             // An error here isn't critical.
             CurrencyMod.LOGGER.error(e.toString());
         }
+    }
+
+    /**
+     * Returns a random list of receivers in the queue.
+     */
+    public static UUID[] randomReceivers() {
+        Collections.shuffle(queue);
+        return queue.toArray(UUID[]::new);
     }
 }

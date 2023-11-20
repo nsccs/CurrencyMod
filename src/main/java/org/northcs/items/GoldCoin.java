@@ -1,9 +1,12 @@
 package org.northcs.items;
 
-import net.minecraft.item.Item;
-
-public class GoldCoin extends Item {
+public class GoldCoin extends CoinBase {
     public GoldCoin(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public int amount() {
+        return 10;
     }
 }
