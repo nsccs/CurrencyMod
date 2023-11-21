@@ -9,8 +9,10 @@ public class PiggyBankEvents implements ServerPlayConnectionEvents.Disconnect {
     public void onPlayDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
         var uuid = handler.player.getUuid();
 
+        // No need to do anything in this case, as this event is
+        // to make sure that piggyBanks gets cleaned up.
         if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
-            PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
+            return;
         }
 
         PiggyBanks.piggyBanks.get(uuid).playerLeft = true;

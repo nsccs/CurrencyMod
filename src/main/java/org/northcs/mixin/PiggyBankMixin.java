@@ -16,8 +16,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.UUID;
-
 @Mixin(PlayerEntity.class)
 public abstract class PiggyBankMixin extends Entity {
     @Shadow
@@ -30,31 +28,28 @@ public abstract class PiggyBankMixin extends Entity {
 
     @Inject(at = @At("TAIL"), method = "readCustomDataFromNbt", locals = LocalCapture.CAPTURE_FAILHARD)
     private void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        UUID uuid = this.getUuid();
+        var uuid = this.getUuid();
 
+        // Only load if there is data (doing otherwise will break default items).
         if (nbt.contains("PiggyItems", 9)) {
-            if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
-                // The player doesn't have a piggy bank, so give them a starting balance.
-                PiggyBankInventory piggyBankInventory = new PiggyBankInventory();
-                piggyBankInventory.addDefaultItems();
+            var piggyBank = new PiggyBankInventory();
+            piggyBank.readNbtList(nbt.getList("PiggyItems", 10));
 
-                PiggyBanks.piggyBanks.put(uuid, piggyBankInventory);
-            }
-
-            PiggyBanks.piggyBanks.get(uuid).readNbtList(nbt.getList("PiggyItems", 10));
+            // We're loading data in, so the old copy should be overridden.
+            PiggyBanks.piggyBanks.put(uuid, piggyBank);
         }
     }
 
     @Inject(at = @At("TAIL"), method = "writeCustomDataToNbt", locals = LocalCapture.CAPTURE_FAILHARD)
     private void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        UUID uuid = this.getUuid();
+        var uuid = this.getUuid();
 
+        // Don't save data if they have no piggy bank (doing this will break default items).
         if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
-            PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
+            return;
         }
 
-        PiggyBankInventory piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);
-
+        var piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);
         nbt.put("PiggyItems", piggyBankInventory.toNbtList());
 
         // If this is writing because the player left, clear the inventory entry.

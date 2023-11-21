@@ -60,6 +60,7 @@ public class PiggyBanks {
         int nbtVersion = NbtHelper.getDataVersion(nbtCompound, -1);
         var playerData = DataFixTypes.PLAYER.update(Schemas.getFixer(), nbtCompound, nbtVersion);
 
+        // This usage is correct because we add default items when there's no data.
         PiggyBankInventory playerPiggyBank = new PiggyBankInventory();
 
         if (playerData.contains("PiggyItems", 9)) {
@@ -92,7 +93,7 @@ public class PiggyBanks {
     private static ItemStack addToOnlinePlayer(PlayerEntity player, ItemStack stack) {
         var uuid = player.getUuid();
         if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
-            PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
+            PiggyBanks.piggyBanks.put(uuid, PiggyBankInventory.init());
         }
 
         var piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);

@@ -39,7 +39,7 @@ public class PiggyBank extends HorizontalFacingBlock implements Waterloggable {
 
         var uuid = player.getUuid();
         if (!PiggyBanks.piggyBanks.containsKey(uuid)) {
-            PiggyBanks.piggyBanks.put(uuid, new PiggyBankInventory());
+            PiggyBanks.piggyBanks.put(uuid, PiggyBankInventory.init());
         }
 
         var piggyBankInventory = PiggyBanks.piggyBanks.get(uuid);

@@ -9,8 +9,27 @@ import org.northcs.CurrencyMod;
 public class PiggyBankInventory extends SimpleInventory {
     public boolean playerLeft = false;
 
+    /**
+     * This should only be called when loading data in.
+     * Otherwise, use init.
+     */
     public PiggyBankInventory() {
         super(54);
+    }
+
+    /**
+     * Creates a new PiggyBankInventory, initialized with the default items.
+     * This should be called normally because a piggy bank will only load
+     * if it exists on the player.
+     * So, if it doesn't in PiggyBanks (and needs to be created), that means
+     * that this is the player's first piggy bank, and they should get the default
+     * items.
+     */
+    public static PiggyBankInventory init() {
+        var piggyBank = new PiggyBankInventory();
+        piggyBank.addDefaultItems();
+
+        return piggyBank;
     }
 
     public void addDefaultItems() {
