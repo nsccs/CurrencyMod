@@ -12,8 +12,10 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
+import org.northcs.CurrencyMod;
 import org.northcs.piggyBank.PiggyBanks;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -21,6 +23,10 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class SellCommand implements CommandRegistrationCallback {
     public static HashMap<UUID, ItemStack> confirmations = new HashMap<>();
+
+    public static HashMap<UUID, Pair<LocalDate, Integer>> itemsSold = new HashMap<>();
+
+    public static final int MAX_ITEMS_PER_DAY = 32;
 
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
@@ -34,31 +40,51 @@ public class SellCommand implements CommandRegistrationCallback {
             }
             confirmations.remove(player.getUuid());
 
+            pruneItemsSold();
+            var dailyItemsSold = itemsSold.containsKey(player.getUuid()) ? itemsSold.get(player.getUuid()).getSecond() : 0;
+
             var perItemValue = getValue(handStack);
             var startingItemCount = handStack.getCount();
+            var curItemCount = startingItemCount;
 
-            // TODO: Implement selling limits.
             // Try to give away as many of the items as possible.
             for (var receiverID : ReceiverQueue.randomReceivers()) {
                 // Don't give the items back to the seller.
-                if (receiverID == player.getUuid()) continue;
+                if (receiverID.equals(player.getUuid())) continue;
+
+                // Figure out how much to give away.
+                // Each retriever can receive 5 items (arbitrary).
+                // It also needs to be within the item limit.
+                // This max is just a sanity check to make sure the allowed amount is not negative.
+                var maxItemsAllowedToSell = Math.max(0, MAX_ITEMS_PER_DAY - dailyItemsSold);
+                var itemsToSell = Math.min(maxItemsAllowedToSell, Math.min(5, curItemCount));
+
+                // If we can't sell any more items, then there's no reason to keep going.
+                if (itemsToSell <= 0) break;
 
                 var receiver = context.getSource().getServer().getPlayerManager().getPlayer(receiverID);
                 // This will work regardless of whether they're offline (receiver is null).
                 // Update handstack to the new stack after attempting to give the items.
-                handStack = PiggyBanks.addToPiggyBank(receiver, receiverID, handStack);
+                var unsoldItems = PiggyBanks.addToPiggyBank(receiver, receiverID, new ItemStack(handStack.getItem(), itemsToSell));
 
-                if (handStack.isEmpty()) break;
+                // These mins and maxes are just sanity checks, because we can't sell less than 0
+                // items or more than the amount we sold.
+                var soldItems = Math.min(itemsToSell, Math.max(0, itemsToSell - unsoldItems.getCount()));
+
+                curItemCount -= soldItems;
+                dailyItemsSold += soldItems;
             }
 
-            var itemsSold = startingItemCount - handStack.getCount();
+            itemsSold.put(player.getUuid(), new Pair<>(LocalDate.now(), dailyItemsSold));
+
+            var itemsSold = startingItemCount - curItemCount;
 
             if (itemsSold == 0) {
                 context.getSource().sendFeedback(() -> Text.literal("No items were sold."), false);
             } else {
                 var moneyMade = itemsSold * perItemValue;
 
-                player.setStackInHand(Hand.MAIN_HAND, handStack);
+                player.setStackInHand(Hand.MAIN_HAND, new ItemStack(handStack.getItem(), curItemCount));
                 PiggyBanks.giveMoney(player, moneyMade);
 
                 context.getSource().sendFeedback(() -> Text.literal("Successfully sold " + itemsSold + " items!"), false);
@@ -81,6 +107,11 @@ public class SellCommand implements CommandRegistrationCallback {
             var stackValue = getValue(handStack);
             if (stackValue == 0) {
                 throw new CommandException(Text.literal("This item cannot be sold!"));
+            }
+
+            var dailyItemsSold = itemsSold.containsKey(player.getUuid()) ? itemsSold.get(player.getUuid()).getSecond() : 0;
+            if (dailyItemsSold >= MAX_ITEMS_PER_DAY) {
+                throw new CommandException(Text.literal("You can only sell " + MAX_ITEMS_PER_DAY + " per day!"));
             }
 
             confirmations.put(player.getUuid(), handStack);
@@ -138,5 +169,13 @@ public class SellCommand implements CommandRegistrationCallback {
         // Finally, it will be multiplied by the chance that it applies.
         effectAmount *= effect.getSecond();
         return effectAmount;
+    }
+
+    private static void pruneItemsSold() {
+        var curDate = LocalDate.now();
+        itemsSold.entrySet().removeIf(entry -> {
+            CurrencyMod.LOGGER.info(Boolean.toString(!entry.getValue().getFirst().equals(curDate)));
+            return !entry.getValue().getFirst().equals(curDate);
+        });
     }
 }
