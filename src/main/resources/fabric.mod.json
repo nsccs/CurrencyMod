@@ -5,21 +5,20 @@
     "name": "Currency Mod",
     "description": "A mod that adds currency to the game.",
     "authors": [
-        "Me!"
+        "NSC Computer Science Club",
+        "Silverysky",
+        "Uellenberg"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "https://northcs.org",
+        "sources": "https://github.com/nsccs/CurrencyMod"
     },
-    "license": "CC0-1.0",
-    "icon": "assets/currencymod/icon.png",
+    "license": "MIT",
+    "icon": "assets/currencymod/textures/item/gold_coin.png",
     "environment": "*",
     "entrypoints": {
         "main": [
             "org.northcs.CurrencyMod"
-        ],
-        "client": [
-            "org.northcs.CurrencyModClient"
         ]
     },
     "mixins": [
