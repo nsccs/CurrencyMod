@@ -109,6 +109,7 @@ public class SellCommand implements CommandRegistrationCallback {
                 throw new CommandException(Text.literal("This item cannot be sold!"));
             }
 
+            pruneItemsSold();
             var dailyItemsSold = itemsSold.containsKey(player.getUuid()) ? itemsSold.get(player.getUuid()).getSecond() : 0;
             if (dailyItemsSold >= MAX_ITEMS_PER_DAY) {
                 throw new CommandException(Text.literal("You can only sell " + MAX_ITEMS_PER_DAY + " per day!"));
